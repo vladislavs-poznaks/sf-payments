@@ -9,10 +9,25 @@ class Request
     const METHOD_PUT = 'PUT';
     const METHOD_PATCH = 'PATCH';
     const METHOD_DELETE = 'DELETE';
-    
+
     const ALLOWED_HTTP_METHODS = [
         'GET', 'POST', 'PUT', 'PATCH', 'DELETE'
     ];
+
+    protected static $instance = null;
+
+    public static function getInstance(): self
+    {
+        if (is_null(static::$instance)) {
+            static::$instance = new self();
+        }
+
+        return static::$instance;
+    }
+
+    protected function __construct() {}
+
+    protected function __clone() {}
 
     public function method(): string
     {
