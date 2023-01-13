@@ -15,9 +15,10 @@ services:
       dockerfile: .docker/nginx.dockerfile
     container_name: nginx-sf-payments
     depends_on:
+      - mysql
       - php
     volumes:
-      - './src:/var/www/html'
+      - '.:/var/www/html'
     ports:
       - '8888:80'
     networks:
@@ -28,7 +29,7 @@ services:
       dockerfile: .docker/php.dockerfile
     container_name: php-sf-payments
     volumes:
-      - './src:/var/www/html'
+      - '.:/var/www/html'
     networks:
       - sf-payments
   mysql:
@@ -49,3 +50,13 @@ services:
       test: [ "CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}" ]
       retries: 3
       timeout: 5s
+  composer:
+    build:
+      context: .
+      dockerfile: .docker/composer.dockerfile
+    container_name: composer
+    working_dir: /var/www/html
+    volumes:
+      - '.:/var/www/html'
+    networks:
+      - sf-payments

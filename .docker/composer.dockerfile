@@ -1,0 +1,6 @@
+FROM composer:2
+
+ENV COMPOSERUSER=app
+ENV COMPOSERGROUP=app
+
+RUN adduser -g ${COMPOSERGROUP} -s /bin/sh -D ${COMPOSERUSER}

@@ -1,0 +1,19 @@
+{
+    "name": "vladislavs/sf-payments",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Vladislavs Poznaks",
+            "email": "vladislavs.poznaks@gmail.com"
+        }
+    ],
+    "require": {
+        "nikic/fast-route": "^1.3"
+    }
+}
