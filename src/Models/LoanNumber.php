@@ -28,7 +28,7 @@ class LoanNumber
         return $this->loanNumber;
     }
 
-    public static function getValidationRegex()
+    public static function getValidationRegex(): string
     {
         $prefix = static::PREFIX;
         $count = static::NUMBER_COUNT;
