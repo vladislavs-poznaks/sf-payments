@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Request;
+use App\Http\Response;
 
 class PaymentsController
 {
@@ -10,6 +11,6 @@ class PaymentsController
     {
         $attributes = Request::getInstance()->getAll();
 
-        return json_encode($attributes);
+        return Response::json($attributes, Response::HTTP_CREATED);
     }
 }
