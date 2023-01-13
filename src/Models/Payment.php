@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Ramsey\Uuid\Uuid;
+
 class Payment
 {
     public function __construct(
         private string $firstname,
         private string $lastname,
-        // TODO : Switch to carbon
-        private string $paymentDate,
+        private Carbon $paymentDate,
         private Amount $amount,
         private string $description,
-        // TODO : Switch to value object
-        private string $refId
+        private Uuid $refId
     ) {}
 
     public function getFirstname(): string
@@ -25,7 +26,7 @@ class Payment
         return $this->lastname;
     }
 
-    public function getPaymentDate(): string
+    public function getPaymentDate(): Carbon
     {
         return $this->paymentDate;
     }
