@@ -60,3 +60,13 @@ services:
       - '.:/var/www/html'
     networks:
       - sf-payments
+  phpunit:
+    build:
+      context: .
+      dockerfile: .docker/php.dockerfile
+    container_name: phpunit-sf-payments
+    entrypoint: [ './vendor/bin/phpunit' ]
+    volumes:
+      - '.:/var/www/html'
+    networks:
+      - sf-payments
