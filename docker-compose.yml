@@ -1,0 +1,33 @@
+version: '3'
+
+volumes:
+  mysql-data:
+    driver: local
+
+networks:
+  sf-payments:
+    driver: bridge
+
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: .docker/nginx.dockerfile
+    container_name: nginx-sf-payments
+    depends_on:
+      - php
+    volumes:
+      - './src:/var/www/html'
+    ports:
+      - '8888:80'
+    networks:
+      - sf-payments
+  php:
+    build:
+      context: .
+      dockerfile: .docker/php.dockerfile
+    container_name: php-sf-payments
+    volumes:
+      - './src:/var/www/html'
+    networks:
+      - sf-payments
