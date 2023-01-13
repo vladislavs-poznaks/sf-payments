@@ -28,12 +28,17 @@ class LoanNumber
         return $this->loanNumber;
     }
 
-    public static function isValid(string $loanNumber): bool
+    public static function getValidationRegex()
     {
         $prefix = static::PREFIX;
         $count = static::NUMBER_COUNT;
 
-        return (bool) preg_match("/($prefix)[0-9]{{$count},{$count}}/", $loanNumber);
+        return "/($prefix)[0-9]{{$count},{$count}}/";
+    }
+
+    public static function isValid(string $loanNumber): bool
+    {
+        return (bool) preg_match(static::getValidationRegex(), $loanNumber);
     }
 
     public static function make(string $loanNumber): self
