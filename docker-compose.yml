@@ -1,7 +1,7 @@
 version: '3'
 
 volumes:
-  mysql-data:
+  sf-payments-mysql-data:
     driver: local
 
 networks:
@@ -31,3 +31,21 @@ services:
       - './src:/var/www/html'
     networks:
       - sf-payments
+  mysql:
+    image: 'mysql:8.0'
+    ports:
+      - '${FORWARD_DB_PORT:-3306}:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_DATABASE: '${DB_DATABASE}'
+      MYSQL_USER: '${DB_USERNAME}'
+      MYSQL_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    volumes:
+      - 'sf-payments-mysql-data:/var/lib/mysql'
+    networks:
+      - sf-payments
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}" ]
+      retries: 3
+      timeout: 5s
