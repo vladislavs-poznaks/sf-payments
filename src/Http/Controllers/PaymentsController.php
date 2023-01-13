@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Request;
+
 class PaymentsController
 {
     public function store()
     {
-        return 'store payment';
+        $attributes = Request::getInstance()->getAll();
+
+        return json_encode($attributes);
     }
 }
