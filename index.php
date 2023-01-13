@@ -6,7 +6,7 @@ use App\Http\Request;
 require_once 'vendor/autoload.php';
 
 $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
-    $r->addRoute('GET', '/api/payment', [PaymentsController::class, 'store']);
+    $r->addRoute('POST', '/api/payment', [PaymentsController::class, 'store']);
 });
 
 $request = new Request();
@@ -14,10 +14,10 @@ $response = $dispatcher->dispatch($request->method(), $request->uri());
 
 switch ($response[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
-        echo 'NOT FOUND';
+        http_response_code(404);
         break;
     case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-        echo 'NOT ALLOWED';
+        http_response_code(405);
         break;
     case FastRoute\Dispatcher::FOUND:
         [$controller, $method] = $response[1];
