@@ -6,7 +6,7 @@ use App\Http\Request;
 require_once 'vendor/autoload.php';
 
 $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
-    $r->addRoute('POST', '/api/payment', [PaymentsController::class, 'store']);
+    $r->addRoute(Request::METHOD_POST, '/api/payment', [PaymentsController::class, 'store']);
 });
 
 $request = new Request();

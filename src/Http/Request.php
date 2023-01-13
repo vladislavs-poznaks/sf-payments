@@ -4,6 +4,12 @@ namespace App\Http;
 
 class Request
 {
+    const METHOD_GET = 'GET';
+    const METHOD_POST = 'POST';
+    const METHOD_PUT = 'PUT';
+    const METHOD_PATCH = 'PATCH';
+    const METHOD_DELETE = 'DELETE';
+    
     const ALLOWED_HTTP_METHODS = [
         'GET', 'POST', 'PUT', 'PATCH', 'DELETE'
     ];
