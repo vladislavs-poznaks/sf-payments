@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Models\LoanNumber;
+use App\Models\ValueObjects\LoanNumber;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 

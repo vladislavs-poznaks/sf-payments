@@ -17,6 +17,11 @@ class Amount
         $this->amount = $amount;
     }
 
+//    public function toString(): string
+//    {
+//        return (string) $this->amount;
+//    }
+
     public static function make(int $amount): self
     {
         return new self($amount);

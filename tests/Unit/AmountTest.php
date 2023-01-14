@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Models\Amount;
+use App\Models\ValueObjects\Amount;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
