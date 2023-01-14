@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use Doctrine\DBAL\DriverManager;
+
 class DatabaseRepository
 {
     protected array $connectionParameters = [];
@@ -19,6 +21,6 @@ class DatabaseRepository
 
     public function getConnection()
     {
-        return \Doctrine\DBAL\DriverManager::getConnection($this->connectionParameters);
+        return DriverManager::getConnection($this->connectionParameters);
     }
 }
