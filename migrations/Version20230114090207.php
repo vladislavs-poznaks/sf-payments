@@ -51,6 +51,8 @@ final class Version20230114090207 extends AbstractMigration
             ->setDefault(null);
 
         $payments->setPrimaryKey(['id']);
+
+        $payments->addUniqueConstraint(['ref_id']);
     }
 
     public function down(Schema $schema): void
