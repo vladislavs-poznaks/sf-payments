@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Table;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
 #[Entity]
@@ -72,5 +73,20 @@ class Loan
     public function getAmountOwed(): Amount
     {
         return $this->amountOwed;
+    }
+
+    public static function make(array $attributes): self
+    {
+        $loan = new self(
+            customerId: Uuid::fromString($attributes['customerId']),
+            loanNumber: LoanNumber::make($attributes['reference']),
+            state: $attributes['state'],
+            amountIssued: Amount::make($attributes['amount_issued'] * 100),
+            amountOwed: Amount::make($attributes['amount_to_pay'] * 100),
+        );
+
+        $loan->setId(Uuid::fromString($attributes['id']));
+
+        return $loan;
     }
 }
