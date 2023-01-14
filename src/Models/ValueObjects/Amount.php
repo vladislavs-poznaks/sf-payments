@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\ValueObjects;
 
 use InvalidArgumentException;
 
@@ -16,11 +16,6 @@ class Amount
 
         $this->amount = $amount;
     }
-
-//    public function toString(): string
-//    {
-//        return (string) $this->amount;
-//    }
 
     public static function make(int $amount): self
     {
