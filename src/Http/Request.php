@@ -53,7 +53,7 @@ class Request
         return rawurldecode($uri);
     }
 
-    public function getAll(): array
+    public function all(): array
     {
         return json_decode(file_get_contents('php://input'), true);
     }
