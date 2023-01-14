@@ -45,4 +45,9 @@ class LoanNumber
     {
         return new self($loanNumber);
     }
+
+    public static function getMaxLength(): int
+    {
+        return strlen(static::PREFIX) + static::NUMBER_COUNT;
+    }
 }

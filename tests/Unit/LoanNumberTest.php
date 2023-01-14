@@ -65,6 +65,7 @@ class LoanNumberTest extends TestCase
     public function getInvalidLoanNumbers()
     {
         return [
+            ['LN', false],
             ['ln12345678', false],
             ['LL12345678', false],
             ['NL12345678', false],
