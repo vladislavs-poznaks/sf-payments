@@ -70,3 +70,13 @@ services:
       - '.:/var/www/html'
     networks:
       - sf-payments
+  migrations:
+    build:
+      context: .
+      dockerfile: .docker/php.dockerfile
+    container_name: phpunit-sf-payments
+    entrypoint: [ './vendor/bin/doctrine-migrations' ]
+    volumes:
+      - '.:/var/www/html'
+    networks:
+      - sf-payments
