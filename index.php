@@ -3,10 +3,7 @@
 use App\Http\Controllers\PaymentsController;
 use App\Http\Request;
 
-require_once 'vendor/autoload.php';
-
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+require_once 'bootstrap.php';
 
 $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
     $r->addRoute(Request::METHOD_POST, '/api/payment', [PaymentsController::class, 'store']);
