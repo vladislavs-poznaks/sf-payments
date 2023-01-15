@@ -3,7 +3,7 @@
 namespace App\Commands;
 
 use App\Models\Payment;
-use App\Repositories\PaymentsDatabaseRepository;
+use App\Repositories\Payments\PaymentsDatabaseRepository;
 use Carbon\Exceptions\InvalidFormatException;
 use Psr\Log\InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
