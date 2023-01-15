@@ -14,6 +14,7 @@ $entityManager = $repository->getEntityManager();
 
 $commands = [
     new \App\Commands\PaymentsReportCommand(),
+    new \App\Commands\PaymentsImportCommand(),
 ];
 
 $application = new \Symfony\Component\Console\Application($_ENV['APP_NAME'], $_ENV['APP_VERSION']);
