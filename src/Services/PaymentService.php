@@ -10,25 +10,20 @@ use App\Models\ValueObjects\LoanNumber;
 use App\Parsers\Exceptions\MissingLoanNumberParserException;
 use App\Parsers\Exceptions\MultipleLoanNumbersParserException;
 use App\Parsers\LoanNumberParser;
-use App\Repositories\LoansDatabaseRepository;
-use App\Repositories\PaymentOrdersDatabaseRepository;
-use App\Repositories\PaymentsDatabaseRepository;
+use App\Repositories\Loans\LoansRepository;
+use App\Repositories\PaymentOrders\PaymentOrdersRepository;
+use App\Repositories\Payments\PaymentsRepository;
 use App\Services\Exceptions\PaymentServiceException;
 
 class PaymentService
 {
     private ?Payment $payment = null;
 
-    private LoansDatabaseRepository $loansRepository;
-    private PaymentsDatabaseRepository $paymentsRepository;
-    private PaymentOrdersDatabaseRepository $paymentOrdersRepository;
-
-    public function __construct()
-    {
-        $this->loansRepository = new LoansDatabaseRepository();
-        $this->paymentsRepository = new PaymentsDatabaseRepository();
-        $this->paymentOrdersRepository = new PaymentOrdersDatabaseRepository();
-    }
+    public function __construct(
+        private LoansRepository $loansRepository,
+        private PaymentsRepository $paymentsRepository,
+        private PaymentOrdersRepository $paymentOrdersRepository
+    ) {}
 
     /**
      * @throws PaymentServiceException

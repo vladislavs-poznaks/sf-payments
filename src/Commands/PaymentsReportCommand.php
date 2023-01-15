@@ -2,7 +2,7 @@
 
 namespace App\Commands;
 
-use App\Repositories\PaymentsDatabaseRepository;
+use App\Repositories\Payments\PaymentsDatabaseRepository;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
 use Symfony\Component\Console\Command\Command;

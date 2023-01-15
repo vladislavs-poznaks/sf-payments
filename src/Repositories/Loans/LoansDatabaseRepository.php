@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Loans;
 
 use App\Models\Loan;
 use App\Models\ValueObjects\LoanNumber;
+use App\Repositories\DatabaseRepository;
 use Doctrine\ORM\Exception\ORMException;
 
-class LoansDatabaseRepository extends DatabaseRepository
+class LoansDatabaseRepository extends DatabaseRepository implements LoansRepository
 {
     public function getByLoanNumber(LoanNumber|string $loanNumber): ?Loan
     {

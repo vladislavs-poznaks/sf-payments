@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Payments;
 
 use App\Models\Payment;
+use App\Repositories\DatabaseRepository;
 use Carbon\Carbon;
 use Doctrine\ORM\Exception\ORMException;
 use Ramsey\Uuid\UuidInterface;
 
-class PaymentsDatabaseRepository extends DatabaseRepository
+class PaymentsDatabaseRepository extends DatabaseRepository implements PaymentsRepository
 {
     public function getByRefId(UuidInterface|string $refId): ?Payment
     {
@@ -22,7 +23,7 @@ class PaymentsDatabaseRepository extends DatabaseRepository
             ->getOneOrNullResult();
     }
 
-    public function getByDate(Carbon $date)
+    public function getByDate(Carbon $date): array
     {
         $query = $this->entityManager->createQueryBuilder();
 
@@ -35,7 +36,7 @@ class PaymentsDatabaseRepository extends DatabaseRepository
             ->getResult();
     }
 
-    public function persist(Payment $payment)
+    public function persist(Payment $payment): void
     {
         $this->entityManager->persist($payment);
     }

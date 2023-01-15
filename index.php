@@ -3,7 +3,7 @@
 use App\Http\Controllers\PaymentsController;
 use App\Http\Request;
 
-require_once 'bootstrap.php';
+$container = require __DIR__ . '/bootstrap.php';
 
 $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
     $r->addRoute(Request::METHOD_POST, '/api/payment', [PaymentsController::class, 'store']);
@@ -11,9 +11,9 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
 
 $request = Request::getInstance();
 
-$response = $dispatcher->dispatch($request->method(), $request->uri());
+$route = $dispatcher->dispatch($request->method(), $request->uri());
 
-switch ($response[0]) {
+switch ($route[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
         http_response_code(404);
         break;
@@ -21,10 +21,11 @@ switch ($response[0]) {
         http_response_code(405);
         break;
     case FastRoute\Dispatcher::FOUND:
-        [$controller, $method] = $response[1];
+        [$controller, $method] = $route[1];
 
         $vars = $response[2] ?? [];
-        echo (new $controller)->{$method}($vars);
+
+        echo $container->call($route[1], $route[2] ?? []);
 
         break;
 }
