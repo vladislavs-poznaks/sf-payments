@@ -8,7 +8,7 @@ use Doctrine\ORM\Exception\ORMException;
 
 class PaymentOrdersDatabaseRepository extends DatabaseRepository implements PaymentOrdersRepository
 {
-    public function persist(PaymentOrder $order)
+    public function persist(PaymentOrder $order): void
     {
         $this->entityManager->persist($order);
     }

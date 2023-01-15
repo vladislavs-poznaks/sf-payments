@@ -23,7 +23,7 @@ class PaymentsDatabaseRepository extends DatabaseRepository implements PaymentsR
             ->getOneOrNullResult();
     }
 
-    public function getByDate(Carbon $date)
+    public function getByDate(Carbon $date): array
     {
         $query = $this->entityManager->createQueryBuilder();
 
@@ -36,7 +36,7 @@ class PaymentsDatabaseRepository extends DatabaseRepository implements PaymentsR
             ->getResult();
     }
 
-    public function persist(Payment $payment)
+    public function persist(Payment $payment): void
     {
         $this->entityManager->persist($payment);
     }
