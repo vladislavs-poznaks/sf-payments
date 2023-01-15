@@ -83,12 +83,11 @@ class PaymentService
     private function processPayment(Loan $loan): void
     {
         $this->payment->setLoan($loan);
-        $this->changePaymentStatus(PaymentStatus::ASSIGNED);
-
-        $coveredAmount = $this->payment->getAmount();
 
         if ($loan->isOverpaid($this->payment->getAmount())) {
             $coveredAmount = $loan->getAmountOwed();
+
+            $paymentStatus = PaymentStatus::PARTIALLY_ASSIGNED;
 
             $overpaidAmount = $this->payment->getAmount()->subtract($loan->getAmountOwed());
 
@@ -101,12 +100,16 @@ class PaymentService
             $this->paymentOrdersRepository->persist($paymentOrder);
 
             $this->paymentOrdersRepository->sync($paymentOrder);
+        } else {
+            $coveredAmount = $this->payment->getAmount();
+
+            $paymentStatus = PaymentStatus::ASSIGNED;
         }
 
         $loan->repay($coveredAmount);
 
         $this->loansRepository->sync($loan);
-        $this->changePaymentStatus(PaymentStatus::PROCESSED);
+        $this->changePaymentStatus($paymentStatus);
     }
 
     private function changePaymentStatus(PaymentStatus $status)
