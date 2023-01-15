@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Table;
+use http\Exception\InvalidArgumentException;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\Uuid;
@@ -39,6 +40,20 @@ class Loan
         #[Column(name: 'amount_owed', type: AmountType::NAME)]
         private Amount $amountOwed
     ) {}
+
+    public function isOverpaid(Amount $amount): bool
+    {
+        return $this->amountOwed->lt($amount);
+    }
+
+    public function repay(Amount $amount): void
+    {
+        if ($this->amountOwed->lt($amount)) {
+            throw new InvalidArgumentException('Cannot repay more than owed');
+        }
+
+        $this->amountOwed = $this->amountOwed->subtract($amount);
+    }
 
     public function setId(UuidInterface $id)
     {
