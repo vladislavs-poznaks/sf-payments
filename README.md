@@ -75,3 +75,4 @@ As no framework was used, much time was spent on developing infrastructure inste
 1. Implementing DI container
 2. Allowing for custom requests objects to delegate validation and authorization
 3. Implementing exception handler for logging purposes, implementing request middleware for logging purposes
+4. Implementing configuration
