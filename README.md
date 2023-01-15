@@ -23,6 +23,14 @@ Run the migrations
 
 ``docker compose up -d nginx``
 
+### Routes
+
+Method: ``POST`` Uri: ``\api\payment`` Responses: ``201, 400, 409, 500``
+
 ### Running console commands
 
 ``docker compose run --rm cli <COMMAND-NAME>``
+
+The application specific commands are namespaced
+
+Payments report - ``docker compose run --rm cli sf-payments:payments-report --date=<DATE-IN-FORMAT-YYYY-MM-DD>``
