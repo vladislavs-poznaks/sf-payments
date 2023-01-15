@@ -46,6 +46,11 @@ class Loan
         return $this->amountOwed->lt($amount);
     }
 
+    public function isPaid(): bool
+    {
+        return $this->amountOwed->getAmount() === 0;
+    }
+
     public function repay(Amount $amount): void
     {
         if ($this->amountOwed->lt($amount)) {
@@ -53,6 +58,10 @@ class Loan
         }
 
         $this->amountOwed = $this->amountOwed->subtract($amount);
+
+        if ($this->isPaid()) {
+            $this->state = 'PAID';
+        }
     }
 
     public function setId(UuidInterface $id)
