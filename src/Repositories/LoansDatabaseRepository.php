@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Loan;
 use App\Models\ValueObjects\LoanNumber;
+use Doctrine\ORM\Exception\ORMException;
 
 class LoansDatabaseRepository extends DatabaseRepository
 {
@@ -18,5 +19,15 @@ class LoansDatabaseRepository extends DatabaseRepository
             ->setParameter('loanNumber', $loanNumber)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function sync(Loan $loan): bool
+    {
+        try {
+            $this->entityManager->flush($loan);
+            return true;
+        } catch (ORMException) {
+            return false;
+        }
     }
 }

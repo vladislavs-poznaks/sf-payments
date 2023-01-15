@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Payment;
 use Carbon\Carbon;
+use Doctrine\ORM\Exception\ORMException;
 use Ramsey\Uuid\UuidInterface;
 
 class PaymentsDatabaseRepository extends DatabaseRepository
@@ -34,14 +35,18 @@ class PaymentsDatabaseRepository extends DatabaseRepository
             ->getResult();
     }
 
-    public function store(Payment $payment)
+    public function persist(Payment $payment)
     {
         $this->entityManager->persist($payment);
+    }
 
-        $this->entityManager->flush();
-
-        $this->entityManager->refresh($payment);
-
-        return $payment;
+    public function sync(Payment $payment): bool
+    {
+        try {
+            $this->entityManager->flush($payment);
+            return true;
+        } catch (ORMException) {
+            return false;
+        }
     }
 }
