@@ -10,12 +10,16 @@ $repository = new \App\Repositories\DatabaseRepository();
 
 $entityManager = $repository->getEntityManager();
 
+// TODO : Add migrations commands
+
 $commands = [
-    // If you want to add your own custom console commands,
-    // you can do so here.
+    new \App\Commands\PaymentsReportCommand(),
 ];
 
-ConsoleRunner::run(
-    new SingleManagerProvider($entityManager),
-    $commands
-);
+$application = new \Symfony\Component\Console\Application($_ENV['APP_NAME'], $_ENV['APP_VERSION']);
+
+ConsoleRunner::addCommands($application, new SingleManagerProvider($entityManager));
+
+$application->addCommands($commands);
+
+$application->run();
