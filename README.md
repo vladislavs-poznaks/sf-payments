@@ -1,5 +1,7 @@
 ### Set up
 
+Only Docker is needed to set up and run this project.
+
 Copy .env variables, optionally set different ports. 
 Note that if ``APP_ENV`` is set to ``development``, it will seed example loan data.
 
