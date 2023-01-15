@@ -58,8 +58,6 @@ final class Version20230114090207 extends AbstractMigration
 
         $payments->addUniqueConstraint(['ref_id']);
 
-        $payments->addForeignKeyConstraint('loans', ['loan_id'], ['id']);
-
         $payments->addIndex(['payment_date']);
         $payments->addIndex(['ref_id']);
     }
