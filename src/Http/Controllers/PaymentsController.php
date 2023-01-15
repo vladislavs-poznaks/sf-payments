@@ -14,7 +14,6 @@ class PaymentsController
 {
     public function store()
     {
-        // TODO : Would be great to use dependency injection, extract to separate request class
         $attributes = Request::getInstance()->all();
 
         $validator = new Validator($attributes);

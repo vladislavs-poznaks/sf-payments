@@ -43,7 +43,6 @@ class PaymentsReportCommand extends Command
         $payments = $repository->getByDate($date);
 
         foreach ($payments as $payment) {
-            // TODO : Implement formatter
             $output->write(implode(' | ', $payment->toArray()), true);
         }
 

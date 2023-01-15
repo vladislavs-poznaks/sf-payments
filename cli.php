@@ -10,8 +10,6 @@ $repository = new \App\Repositories\DatabaseRepository();
 
 $entityManager = $repository->getEntityManager();
 
-// TODO : Add migrations commands
-
 $commands = [
     new \App\Commands\PaymentsReportCommand(),
     new \App\Commands\PaymentsImportCommand(),

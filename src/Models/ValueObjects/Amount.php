@@ -36,10 +36,4 @@ class Amount
     {
         return $this->amount;
     }
-
-    public function format(): string
-    {
-        // TODO : Add formatting
-        return '';
-    }
 }

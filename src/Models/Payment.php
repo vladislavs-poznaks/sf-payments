@@ -129,7 +129,6 @@ class Payment
         $firstname = $attributes['firstname'];
         $lastname = $attributes['lastname'];
         $paymentDate = Carbon::parse($attributes['paymentDate']);
-        // TODO : Assuming that float is passed, maybe something on value objects level
         $amount = Amount::make(ceil($attributes['amount'] * 100));
         $description = $attributes['description'];
         $refId = Uuid::fromString($attributes['refId']);
