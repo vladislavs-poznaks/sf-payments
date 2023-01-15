@@ -22,3 +22,7 @@ Run the migrations
 ### Starting project
 
 ``docker compose up -d nginx``
+
+### Running console commands
+
+``docker compose run --rm cli <COMMAND-NAME>``
