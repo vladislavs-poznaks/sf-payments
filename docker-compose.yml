@@ -80,3 +80,13 @@ services:
       - '.:/var/www/html'
     networks:
       - sf-payments
+  cli:
+    build:
+      context: .
+      dockerfile: .docker/php.dockerfile
+    container_name: phpunit-sf-payments
+    entrypoint: [ "php", "cli.php" ]
+    volumes:
+      - '.:/var/www/html'
+    networks:
+      - sf-payments
