@@ -58,6 +58,8 @@ Console part implemented partly (except for error handling, needs clarification)
 
 Logging NOT implemented
 
+Testing partly implemented (for value objects)
+
 As no framework was used, much time was spent on developing infrastructure instead of business logic.
 
 ### Further development
