@@ -48,6 +48,8 @@ Alternatively, any path can be bound to container's imports directory.
 
 ### Assumptions and clarifications
 
+As it was not entirely clear if loans and customers are separate services or is this application's part, no relationships were mapped and foreign keys defined to keep it loosely coupled.
+
 For imports the reference differed from API request example's UUID format. In order to not implement additional column, import data was adjusted. If needed separate refereneces, further development is required.
 For imports console output it is not clear as to on what particular conditions the custom errors should be returned. On any record error or on all, should the valid data be not imported if there are errors.
 For imports it is not cleared if payment should be also processed.
