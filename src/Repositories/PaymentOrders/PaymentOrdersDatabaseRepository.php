@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\PaymentOrders;
 
 use App\Models\PaymentOrder;
+use App\Repositories\DatabaseRepository;
 use Doctrine\ORM\Exception\ORMException;
 
-class PaymentOrdersDatabaseRepository extends DatabaseRepository
+class PaymentOrdersDatabaseRepository extends DatabaseRepository implements PaymentOrdersRepository
 {
     public function persist(PaymentOrder $order)
     {

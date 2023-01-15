@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Payments;
 
 use App\Models\Payment;
+use App\Repositories\DatabaseRepository;
 use Carbon\Carbon;
 use Doctrine\ORM\Exception\ORMException;
 use Ramsey\Uuid\UuidInterface;
 
-class PaymentsDatabaseRepository extends DatabaseRepository implements PaymentRepository
+class PaymentsDatabaseRepository extends DatabaseRepository implements PaymentsRepository
 {
     public function getByRefId(UuidInterface|string $refId): ?Payment
     {
