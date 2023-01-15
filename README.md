@@ -21,6 +21,8 @@ Run the migrations
 
 ### Starting project
 
+Please note, that by default application is served on port ``8888``
+
 ``docker compose up -d nginx``
 
 ### Routes
