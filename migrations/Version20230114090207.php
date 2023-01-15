@@ -28,6 +28,11 @@ final class Version20230114090207 extends AbstractMigration
             ->addColumn('id', Types::STRING)
             ->setLength(36);
 
+        $payments
+            ->addColumn('loan_id', Types::STRING)
+            ->setLength(36)
+            ->setNotnull(false);
+
         $payments->addColumn('firstname', Types::STRING);
         $payments->addColumn('lastname', Types::STRING);
 
@@ -47,12 +52,16 @@ final class Version20230114090207 extends AbstractMigration
 
         $payments
             ->addColumn('status', Types::SMALLINT)
-            ->setNotnull(false)
-            ->setDefault(null);
+            ->setNotnull(false);
 
         $payments->setPrimaryKey(['id']);
 
         $payments->addUniqueConstraint(['ref_id']);
+
+        $payments->addForeignKeyConstraint('loans', ['loan_id'], ['id']);
+
+        $payments->addIndex(['payment_date']);
+        $payments->addIndex(['ref_id']);
     }
 
     public function down(Schema $schema): void
