@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Doctrine\ORM\Exception\ORMException;
 use Ramsey\Uuid\UuidInterface;
 
-class PaymentsDatabaseRepository extends DatabaseRepository
+class PaymentsDatabaseRepository extends DatabaseRepository implements PaymentRepository
 {
     public function getByRefId(UuidInterface|string $refId): ?Payment
     {
