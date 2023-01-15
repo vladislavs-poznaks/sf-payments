@@ -2,10 +2,17 @@
 
 namespace App\Repositories;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMSetup;
 
 class DatabaseRepository
 {
+    protected EntityManager $entityManager;
+
+    protected static ?Connection $connection = null;
+
     protected array $connectionParameters = [];
 
     public function __construct()
@@ -17,6 +24,16 @@ class DatabaseRepository
             'host' => $_ENV['DB_HOST'],
             'driver' => 'pdo_mysql',
         ];
+
+        $this->entityManager = new EntityManager(
+            $this->getConnection(),
+            ORMSetup::createAttributeMetadataConfiguration([__DIR__ . '/../Models'])
+        );
+    }
+
+    public function getEntityManager(): EntityManager
+    {
+        return $this->entityManager;
     }
 
     public function getConnection()
