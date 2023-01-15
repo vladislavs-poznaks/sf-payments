@@ -14,7 +14,7 @@ enum PaymentStatus: int
 
     case ASSIGNED = 301;
 
-    case PROCESSED = 401;
+    case PARTIALLY_ASSIGNED = 401;
 
     public function toString(): string
     {
@@ -24,7 +24,7 @@ enum PaymentStatus: int
             self::MULTIPLE_LOAN_NUMBER_ERROR => 'MULTIPLE LOAN NUMBERS',
             self::INCORRECT_LOAN_NUMBER_ERROR => 'INCORRECT LOAN NUMBER',
             self::ASSIGNED => 'ASSIGNED',
-            self::PROCESSED => 'PROCESSED',
+            self::PARTIALLY_ASSIGNED => 'PARTIALLY_ASSIGNED',
         };
     }
 }
