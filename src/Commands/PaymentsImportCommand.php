@@ -3,7 +3,7 @@
 namespace App\Commands;
 
 use App\Models\Payment;
-use App\Repositories\Payments\PaymentsDatabaseRepository;
+use App\Repositories\Payments\PaymentsRepository;
 use Carbon\Exceptions\InvalidFormatException;
 use Psr\Log\InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
@@ -16,6 +16,12 @@ class PaymentsImportCommand extends Command
     protected static $defaultName = "sf-payments:payments-import";
 
     protected static $defaultDescription = "Import payments from CSV";
+
+    public function __construct(
+        private PaymentsRepository $repository
+    ) {
+        parent::__construct();
+    }
 
     protected function configure()
     {
@@ -39,8 +45,6 @@ class PaymentsImportCommand extends Command
 
         $records = $this->getParsedRecords($path);
 
-        $repository = new PaymentsDatabaseRepository();
-
         foreach ($records as $key => $attributes) {
             if ($key === 0) {
                 continue;
@@ -60,13 +64,13 @@ class PaymentsImportCommand extends Command
                     'refId' => $refId
                 ]);
 
-                $repository->persist($payment);
+                $this->repository->persist($payment);
             } catch (InvalidFormatException|InvalidArgumentException $e) {
                 $output->writeln($e->getMessage());
             }
         }
 
-        $repository->getEntityManager()->flush();
+        $this->repository->getEntityManager()->flush();
 
         return Command::SUCCESS;
     }
