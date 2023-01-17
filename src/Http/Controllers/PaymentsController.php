@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Dtos\Payments\PaymentDTO;
-use App\Http\Request;
+use App\Http\Requests\PaymentStoreRequest;
 use App\Http\Response;
 use App\Models\Payment;
 use App\Models\ValueObjects\Amount;
@@ -12,7 +12,6 @@ use App\Services\Exceptions\PaymentServiceException;
 use App\Services\PaymentService;
 use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
-use Valitron\Validator;
 
 class PaymentsController
 {
@@ -21,23 +20,12 @@ class PaymentsController
         private PaymentService     $service
     ) {}
 
-    public function store()
+    public function store(PaymentStoreRequest $request)
     {
-        $attributes = Request::getInstance()->all();
+        $attributes = $request->all();
 
-        $validator = new Validator($attributes);
-
-        $validator->rules([
-            'required' => ['firstname', 'lastname', 'paymentDate', 'amount', 'description', 'refId'],
-            'numeric' => ['amount'],
-            'min' => [
-                ['amount', 0.01]
-            ],
-            'paymentDateFormat' => ['paymentDate'],
-        ]);
-
-        if (!$validator->validate()) {
-            return Response::json($validator->errors(), Response::HTTP_BAD_REQUEST);
+        if (!$request->isValid()) {
+            return Response::json($request->errors(), Response::HTTP_BAD_REQUEST);
         }
 
         if (!is_null($this->repository->getByRefId($attributes['refId']))) {
