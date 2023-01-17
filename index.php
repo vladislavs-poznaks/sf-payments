@@ -9,9 +9,7 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
     $r->addRoute(Request::METHOD_POST, '/api/payment', [PaymentsController::class, 'store']);
 });
 
-$request = Request::getInstance();
-
-$route = $dispatcher->dispatch($request->method(), $request->uri());
+$route = $dispatcher->dispatch(Request::method(), Request::uri());
 
 switch ($route[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
