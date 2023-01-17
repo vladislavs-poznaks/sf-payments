@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Dtos\Payments\PaymentDTO;
 use App\Http\Requests\PaymentStoreRequest;
+use App\Http\Resources\PaymentResource;
 use App\Http\Response;
 use App\Models\Payment;
 use App\Models\ValueObjects\Amount;
@@ -54,6 +55,6 @@ class PaymentsController
             ], Response::HTTP_INTERNAL_ERROR);
         }
 
-        return Response::json($this->service->getPayment()->toArray(), Response::HTTP_CREATED);
+        return PaymentResource::make($this->service->getPayment(), Response::HTTP_CREATED);
     }
 }
