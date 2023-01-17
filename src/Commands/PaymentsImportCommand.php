@@ -6,8 +6,8 @@ use App\Dtos\Payments\PaymentDTO;
 use App\Models\Payment;
 use App\Models\ValueObjects\Amount;
 use App\Models\ValueObjects\Exceptions\NegativeAmountException;
-use App\Repositories\Payments\PaymentsDatabaseRepository;
 use Carbon\Carbon;
+use App\Repositories\Payments\PaymentsRepository;
 use Carbon\Exceptions\InvalidFormatException;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Command\Command;
@@ -22,6 +22,12 @@ class PaymentsImportCommand extends Command implements NegativeAmountInterface, 
     protected static $defaultName = "sf-payments:payments-import";
 
     protected static $defaultDescription = "Import payments from CSV";
+
+    public function __construct(
+        private PaymentsRepository $repository
+    ) {
+        parent::__construct();
+    }
 
     protected function configure()
     {
@@ -43,8 +49,6 @@ class PaymentsImportCommand extends Command implements NegativeAmountInterface, 
             return Command::FAILURE;
         }
 
-        $repository = new PaymentsDatabaseRepository();
-
         $file = fopen($path, 'r');
 
         while (($data = fgetcsv($file)) !== FALSE) {
@@ -56,13 +60,13 @@ class PaymentsImportCommand extends Command implements NegativeAmountInterface, 
                 return self::NEGATIVE_AMOUNT;
             }
 
-            if (!is_null($repository->getByRefId($dto->getRefId()))) {
+            if (!is_null($this->repository->getByRefId($dto->getRefId()))) {
                 return Command::FAILURE;
             }
 
             $payment = Payment::make($dto);
 
-            $repository->persistAndSync($payment);
+            $this->repository->persistAndSync($payment);
         }
 
         fclose($file);
