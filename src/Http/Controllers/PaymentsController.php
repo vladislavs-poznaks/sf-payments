@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Dtos\Payments\PaymentDTO;
 use App\Http\Request;
 use App\Http\Response;
 use App\Models\Payment;
+use App\Models\ValueObjects\Amount;
 use App\Repositories\Payments\PaymentsRepository;
 use App\Services\Exceptions\PaymentServiceException;
 use App\Services\PaymentService;
+use Carbon\Carbon;
+use Ramsey\Uuid\Uuid;
 use Valitron\Validator;
 
 class PaymentsController
@@ -42,8 +46,19 @@ class PaymentsController
             ], Response::HTTP_CONFLICT);
         }
 
+        $dto = new PaymentDTO(
+            firstName: $attributes['firstname'],
+            lastName: $attributes['lastname'],
+            description: $attributes['description'],
+            amount: Amount::make($attributes['amount'] * 100),
+            paymentDate: Carbon::createFromFormat('c', $attributes['paymentDate']),
+            refId: Uuid::fromString($attributes['refId'])
+        );
+
+        $payment = Payment::make($dto);
+
         try {
-            $this->service->handle(Payment::make($attributes));
+            $this->service->handle($payment);
         } catch (PaymentServiceException $e) {
             return Response::json([
                 'error' => $e->getMessage(),

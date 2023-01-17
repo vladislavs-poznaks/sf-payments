@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Payments;
 
+use App\Models\Collections\PaymentsCollection;
 use App\Models\Payment;
 use App\Repositories\DatabaseRepository;
 use Carbon\Carbon;
@@ -23,17 +24,19 @@ class PaymentsDatabaseRepository extends DatabaseRepository implements PaymentsR
             ->getOneOrNullResult();
     }
 
-    public function getByDate(Carbon $date): array
+    public function getByDate(Carbon $date): PaymentsCollection
     {
         $query = $this->entityManager->createQueryBuilder();
 
-        return $query
+        $payments = $query
             ->select('p')
             ->from(Payment::class, 'p')
             ->where('p.paymentDate LIKE :date')
             ->setParameter('date', $date->format('Y-m-d') . '%')
             ->getQuery()
             ->getResult();
+
+        return new PaymentsCollection($payments);
     }
 
     public function persist(Payment $payment): void
@@ -49,5 +52,12 @@ class PaymentsDatabaseRepository extends DatabaseRepository implements PaymentsR
         } catch (ORMException) {
             return false;
         }
+    }
+
+    public function persistAndSync(Payment $payment): bool
+    {
+        $this->persist($payment);
+
+        return $this->sync($payment);
     }
 }

@@ -1,4 +1,3 @@
-paymentDate,payerName,payerSurname,amount,nationalSecurityNumber,description,paymentReference
 20221212071629,Biba,Boba,17.99,1234567890,LN72638091,10b7d65c-ae92-4542-8411-96ae01e0f27b
 20221310235959,Pupa,Lupa,116.27,0987654321,LN12345678,2a8dbb70-84a3-4c71-bace-ef8771bdacca
 20221310235959,Dupa,Lupa,116.27,0987654322,LN12345678,f3c9b33f-bd8d-43ac-876c-793722050d29
