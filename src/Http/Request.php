@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use Valitron\Validator;
+
 class Request
 {
     const METHOD_GET = 'GET';
@@ -14,22 +16,42 @@ class Request
         'GET', 'POST', 'PUT', 'PATCH', 'DELETE'
     ];
 
-    protected static $instance = null;
+    protected Validator $validator;
 
-    public static function getInstance(): self
-    {
-        if (is_null(static::$instance)) {
-            static::$instance = new self();
-        }
+    public function __construct() {
+        $this->validator = new Validator($this->all());
 
-        return static::$instance;
+        $this->validator->rules($this->rules());
     }
 
-    protected function __construct() {}
+    public function all(): array
+    {
+        return json_decode(file_get_contents('php://input'), true);
+    }
 
-    protected function __clone() {}
+    public function rules(): array
+    {
+        return [
+            // Validation rules
+        ];
+    }
 
-    public function method(): string
+    public function isValid(): bool
+    {
+        return $this->validator->validate();
+    }
+
+    public function errors(): array
+    {
+        return $this->validator->errors();
+    }
+
+    protected function validate(): void
+    {
+        $this->validator->rules($this->rules);
+    }
+
+    public static function method(): string
     {
         //Method spoofing
         if (isset($_POST['_method'])) {
@@ -41,7 +63,7 @@ class Request
         return $_SERVER['REQUEST_METHOD'];
     }
 
-    public function uri(): string
+    public static function uri(): string
     {
         $uri = $_SERVER['REQUEST_URI'];
 
@@ -51,10 +73,5 @@ class Request
         }
 
         return rawurldecode($uri);
-    }
-
-    public function all(): array
-    {
-        return json_decode(file_get_contents('php://input'), true);
     }
 }
