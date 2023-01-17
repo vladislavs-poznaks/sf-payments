@@ -109,21 +109,6 @@ class Payment
         return $this;
     }
 
-    public function toArray(): array
-    {
-        return [
-            'id' => $this->getId()->toString(),
-            'loanId' => $this->getLoanId()?->toString(),
-            'firstname' => $this->getFirstname(),
-            'lastname' => $this->getLastname(),
-            'paymentDate' => $this->getPaymentDate()->toDateTimeString(),
-            'amount' => $this->getAmount()->getAmount(),
-            'description' => $this->getDescription(),
-            'refId' => $this->getRefId()->toString(),
-            'status' => $this->getStatus()->toString(),
-        ];
-    }
-
     public static function make(array $attributes): self
     {
         $firstname = $attributes['firstname'];

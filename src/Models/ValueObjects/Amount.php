@@ -36,4 +36,9 @@ class Amount
     {
         return $this->amount;
     }
+
+    public function __toString(): string
+    {
+        return (string) round($this->amount / 100, 2);
+    }
 }
