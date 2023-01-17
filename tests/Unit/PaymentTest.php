@@ -30,10 +30,10 @@ class PaymentTest extends TestCase
         $this->assertNull($payment->getLoanId());
 
         $firstLoanId = Uuid::uuid4();
-        $firstLoan = $this->createLoanWithId($firstLoanId);
+        $firstLoan = $this->createLoan($firstLoanId);
 
         $secondLoanId = Uuid::uuid4();
-        $secondLoan = $this->createLoanWithId($secondLoanId);
+        $secondLoan = $this->createLoan($secondLoanId);
 
         $payment->setLoan($firstLoan);
 

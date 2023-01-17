@@ -10,17 +10,43 @@ use Ramsey\Uuid\UuidInterface;
 
 trait DummyLoans
 {
-    protected function createLoanWithId(UuidInterface|string $loanId = null): Loan
-    {
+    protected function createLoan(
+        ?UuidInterface $id = null,
+        ?UuidInterface $customerId = null,
+        ?LoanNumber $loanNumber = null,
+        string $state = 'ACTIVE',
+        ?Amount $amountIssued = null,
+        ?Amount $amountOwed = null,
+    ): Loan {
+        if (is_null($id)) {
+            $id = Uuid::uuid4();
+        }
+
+        if (is_null($customerId)) {
+            $customerId = Uuid::uuid4();
+        }
+
+        if (is_null($loanNumber)) {
+            $loanNumber = LoanNumber::make('LN12345678');
+        }
+
+        if (is_null($amountIssued)) {
+            $amountIssued = Amount::make(random_int(1000, 150000));
+        }
+        if (is_null($amountOwed)) {
+            $interest = floor($amountIssued->getAmount() / 5);
+            $amountOwed = Amount::make($amountIssued->getAmount() + $interest);
+        }
+
         $loan = new Loan(
-            customerId: Uuid::uuid4(),
-            loanNumber: LoanNumber::make('LN12345678'),
-            state: 'ACTIVE',
-            amountIssued: Amount::make(1000),
-            amountOwed: Amount::make(1200),
+            customerId: $customerId,
+            loanNumber: $loanNumber,
+            state: $state,
+            amountIssued: $amountIssued,
+            amountOwed: $amountOwed,
         );
 
-        $loan->setId($loanId ?? Uuid::uuid4());
+        $loan->setId($id);
 
         return $loan;
     }
