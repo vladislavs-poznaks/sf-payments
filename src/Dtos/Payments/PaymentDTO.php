@@ -1,22 +1,49 @@
 <?php
 
-namespace App\Payments\Dtos;
+namespace App\Dtos\Payments;
 
 use App\Models\ValueObjects\Amount;
 use Carbon\Carbon;
 use Ramsey\Uuid\UuidInterface;
 
-interface PaymentDTO
+class PaymentDTO
 {
-    public function getFirstName(): string;
+    public function __construct(
+        private readonly string $firstName,
+        private readonly string $lastName,
+        private readonly string $description,
+        private readonly Amount $amount,
+        private readonly Carbon $paymentDate,
+        private readonly UuidInterface $refId,
+    ) {}
 
-    public function getLastName(): string;
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
 
-    public function getDescription(): string;
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
 
-    public function getAmount(): Amount;
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
 
-    public function getPaymentDate(): Carbon;
+    public function getAmount(): Amount
+    {
+        return $this->amount;
+    }
 
-    public function getRefId(): UuidInterface;
+    public function getPaymentDate(): Carbon
+    {
+        return $this->paymentDate;
+    }
+
+    public function getRefId(): UuidInterface
+    {
+        return $this->refId;
+    }
 }
