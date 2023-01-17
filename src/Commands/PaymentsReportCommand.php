@@ -2,7 +2,7 @@
 
 namespace App\Commands;
 
-use App\Repositories\Payments\PaymentsDatabaseRepository;
+use App\Repositories\Payments\PaymentsRepository;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
 use Symfony\Component\Console\Command\Command;
@@ -17,6 +17,12 @@ class PaymentsReportCommand extends Command implements InvalidDateInterface
     protected static $defaultName = "sf-payments:payments-report";
 
     protected static $defaultDescription = "Get payments report by date";
+
+    public function __construct(
+        private PaymentsRepository $repository
+    ) {
+        parent::__construct();
+    }
 
     protected function configure()
     {
@@ -38,9 +44,7 @@ class PaymentsReportCommand extends Command implements InvalidDateInterface
             return self::INVALID_DATE;
         }
 
-        $repository = new PaymentsDatabaseRepository();
-
-        $payments = $repository->getByDate($date);
+        $payments = $this->repository->getByDate($date);
 
         foreach ($payments->all() as $payment) {
             $output->write(implode(' | ', [
