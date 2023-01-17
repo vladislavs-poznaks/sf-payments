@@ -109,21 +109,6 @@ class Payment implements Model
         return $this;
     }
 
-    public function toArray(): array
-    {
-        return [
-            'id' => $this->getId()->toString(),
-            'loanId' => $this->getLoanId()?->toString(),
-            'firstname' => $this->getFirstname(),
-            'lastname' => $this->getLastname(),
-            'paymentDate' => $this->getPaymentDate()->format('c'),
-            'amount' => (string) $this->getAmount(),
-            'description' => $this->getDescription(),
-            'refId' => $this->getRefId()->toString(),
-            'status' => $this->getStatus()->toString(),
-        ];
-    }
-
     public static function make(PaymentDTO $dto): self
     {
         return new self(
