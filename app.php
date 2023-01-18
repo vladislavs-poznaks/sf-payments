@@ -9,6 +9,8 @@ use App\Repositories\Payments\PaymentsDatabaseRepository;
 use function DI\create;
 
 return [
+    \App\Loggers\Logger::class => create(\App\Loggers\FileLogger::class),
+
     LoansRepository::class => create(LoansDatabaseRepository::class),
     PaymentsRepository::class => create(PaymentsDatabaseRepository::class),
     PaymentOrdersRepository::class => create(PaymentOrdersDatabaseRepository::class),
