@@ -28,7 +28,10 @@ switch ($route[0]) {
         } catch (\App\Http\Exceptions\ValidationException $exception) {
             echo \App\Http\Response::json($exception->request->errors(), $exception->request->getHttpErrorCode());
         } catch (Exception $exception) {
-            // Log error
+            $logger = $container->get(\App\Loggers\Logger::class);
+
+            $logger::error($exception);
+
             echo \App\Http\Response::json([
                 'error' => $exception->getMessage(),
                 'trace' => $exception->getTrace()
