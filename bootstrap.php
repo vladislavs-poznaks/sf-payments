@@ -14,6 +14,11 @@ Type::addType(\App\Types\CarbonType::NAME, \App\Types\CarbonType::class);
 Type::addType(\App\Types\AmountType::NAME, \App\Types\AmountType::class);
 Type::addType(\App\Types\LoanNumberType::NAME, \App\Types\LoanNumberType::class);
 
+// IoC container
+$containerBuilder = new ContainerBuilder;
+$containerBuilder->addDefinitions(__DIR__ . '/app.php');
+$container = $containerBuilder->build();
+
 // Custom validation
 Valitron\Validator::addRule('paymentDateFormat', function($field, $value, array $params, array $fields) {
     try {
@@ -24,9 +29,10 @@ Valitron\Validator::addRule('paymentDateFormat', function($field, $value, array 
     }
 }, "Incorrect {field} format");
 
-// IoC container
-$containerBuilder = new ContainerBuilder;
-$containerBuilder->addDefinitions(__DIR__ . '/app.php');
-$container = $containerBuilder->build();
+Valitron\Validator::addRule('uniqueRefId', function($field, $value, array $params, array $fields) use ($container) {
+    $repository = $container->get(\App\Repositories\Payments\PaymentsRepository::class);
+
+    return is_null($repository->getByRefId($value));
+}, "Value of {field} must be unique");
 
 return $container;

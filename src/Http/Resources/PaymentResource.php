@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\HttpCode;
 use App\Http\Response;
 use App\Models\Payment;
 
@@ -9,7 +10,7 @@ class PaymentResource extends Response
 {
     public function __construct(private Payment $payment) {}
 
-    public static function make(Payment $payment, int $httpCode = self::HTTP_OK): string
+    public static function make(Payment $payment, HttpCode $httpCode = HttpCode::OK): string
     {
         $resource = new self($payment);
 
