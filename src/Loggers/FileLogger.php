@@ -13,6 +13,10 @@ class FileLogger implements Logger
 
         $path = __DIR__ . '/../../logs/';
 
+        if (!file_exists($path)) {
+            mkdir($path);
+        }
+
         $filename = ($prefix ? $prefix . '-' . $date : $date) . '.log';
 
         $log = json_encode([
