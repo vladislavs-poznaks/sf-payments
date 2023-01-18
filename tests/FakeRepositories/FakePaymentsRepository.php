@@ -2,6 +2,7 @@
 
 namespace Tests\FakeRepositories;
 
+use App\Models\Collections\PaymentsCollection;
 use App\Models\Payment;
 use App\Repositories\Payments\PaymentsRepository;
 use Carbon\Carbon;
@@ -38,7 +39,7 @@ class FakePaymentsRepository implements PaymentsRepository
         // TODO: Implement getByRefId() method.
     }
 
-    public function getByDate(Carbon $date): array
+    public function getByDate(Carbon $date): PaymentsCollection
     {
         // TODO: Implement getByDate() method.
     }
@@ -53,5 +54,10 @@ class FakePaymentsRepository implements PaymentsRepository
         $this->calledMethod('sync');
 
         return true;
+    }
+
+    public function persistAndSync(Payment $payment): bool
+    {
+        // TODO: Implement persistAndSync() method.
     }
 }
