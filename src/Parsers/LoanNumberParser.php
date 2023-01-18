@@ -11,7 +11,8 @@ class LoanNumberParser
     public function __invoke(string $s): LoanNumber
     {
         $matches = [];
-        $matchesCount = preg_match(LoanNumber::getValidationRegex(), $s, $matches);
+
+        $matchesCount = preg_match_all(LoanNumber::getValidationRegex(), $s, $matches);
 
         if ($matchesCount === 0) {
             throw new MissingLoanNumberParserException("Description must include a correct Loan number");
@@ -21,6 +22,8 @@ class LoanNumberParser
             throw new MultipleLoanNumbersParserException("Several loan numbers included in description");
         }
 
-        return LoanNumber::make($matches[0]);
+        $firstMatch = is_array($matches[0]) ? $matches[0][0] : $matches[0];
+
+        return LoanNumber::make($firstMatch);
     }
 }
