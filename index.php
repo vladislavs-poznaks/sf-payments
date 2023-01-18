@@ -23,7 +23,17 @@ switch ($route[0]) {
 
         $vars = $response[2] ?? [];
 
-        echo $container->call($route[1], $route[2] ?? []);
+        try {
+            echo $container->call($route[1], $route[2] ?? []);
+        } catch (\App\Http\Exceptions\ValidationException $exception) {
+            echo \App\Http\Response::json($exception->request->errors(), $exception->request->getHttpErrorCode());
+        } catch (Exception $exception) {
+            // Log error
+            echo \App\Http\Response::json([
+                'error' => $exception->getMessage(),
+                'trace' => $exception->getTrace()
+            ], \App\Http\HttpCode::INTERNAL_ERROR);
+        }
 
         break;
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use App\Dtos\DTO;
+use App\Http\Exceptions\ValidationException;
 use Valitron\Validator;
 
 class Request
@@ -22,11 +24,20 @@ class Request
         $this->validator = new Validator($this->all());
 
         $this->validator->rules($this->rules());
+
+        if (!$this->validator->validate()) {
+            throw new ValidationException($this);
+        }
     }
 
     public function all(): array
     {
         return json_decode(file_get_contents('php://input'), true);
+    }
+
+    public function dto(): DTO
+    {
+        return new DTO();
     }
 
     public function rules(): array
@@ -36,19 +47,14 @@ class Request
         ];
     }
 
-    public function isValid(): bool
+    public function getHttpErrorCode(): HttpCode
     {
-        return $this->validator->validate();
+        return HttpCode::UNPROCESSABLE_ENTITY;
     }
 
-    public function errors(): array
+    public function errors(?string $field = null): array|bool
     {
-        return $this->validator->errors();
-    }
-
-    protected function validate(): void
-    {
-        $this->validator->rules($this->rules);
+        return $this->validator->errors($field);
     }
 
     public static function method(): string
