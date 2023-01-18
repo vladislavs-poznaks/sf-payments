@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Http\HttpCode;
 use App\Http\Request;
 
 class PaymentStoreRequest extends Request
@@ -15,6 +16,16 @@ class PaymentStoreRequest extends Request
                 ['amount', 0.01]
             ],
             'paymentDateFormat' => ['paymentDate'],
+            'uniqueRefId' => ['refId'],
         ];
+    }
+
+    public function getHttpErrorCode(): HttpCode
+    {
+        if ($this->errors('refId')) {
+            return HttpCode::CONFLICT;
+        }
+
+        return HttpCode::BAD_REQUEST;
     }
 }
