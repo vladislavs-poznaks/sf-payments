@@ -20,12 +20,13 @@ class Request
 
     protected Validator $validator;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->validator = new Validator($this->all());
 
         $this->validator->rules($this->rules());
 
-        if (!$this->validator->validate()) {
+        if (! $this->validator->validate()) {
             throw new ValidationException($this);
         }
     }

@@ -15,7 +15,8 @@ class PaymentsController
     public function __construct(
         private PaymentService $service,
         private Logger $logger
-    ) {}
+    ) {
+    }
 
     public function store(PaymentStoreRequest $request)
     {

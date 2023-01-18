@@ -17,7 +17,7 @@ class PaymentStoreRequest extends Request
             'required' => ['firstname', 'lastname', 'paymentDate', 'amount', 'description', 'refId'],
             'numeric' => ['amount'],
             'min' => [
-                ['amount', 0.01]
+                ['amount', 0.01],
             ],
             'paymentDateFormat' => ['paymentDate'],
             'uniqueRefId' => ['refId'],

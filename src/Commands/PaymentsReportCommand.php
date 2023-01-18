@@ -41,6 +41,7 @@ class PaymentsReportCommand extends Command implements InvalidDateInterface
             $date = Carbon::createFromFormat(static::INPUT_DATE_FORMAT, $input->getOption('date'));
         } catch (InvalidFormatException) {
             $output->write('Invalid date format, must use YYYY-MM-DD', true);
+
             return self::INVALID_DATE;
         }
 

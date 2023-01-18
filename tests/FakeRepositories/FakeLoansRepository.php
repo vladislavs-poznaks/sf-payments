@@ -41,6 +41,7 @@ class FakeLoansRepository implements LoansRepository
     public function getByLoanNumber(LoanNumber|string $loanNumber): ?Loan
     {
         $this->calledMethod('getByLoanNumber');
+
         return $this->loan;
     }
 

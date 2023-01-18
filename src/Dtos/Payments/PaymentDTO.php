@@ -16,7 +16,8 @@ class PaymentDTO extends DTO
         private readonly Amount $amount,
         private readonly Carbon $paymentDate,
         private readonly UuidInterface $refId,
-    ) {}
+    ) {
+    }
 
     public function getFirstName(): string
     {

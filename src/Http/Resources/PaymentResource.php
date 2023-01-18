@@ -8,7 +8,9 @@ use App\Models\Payment;
 
 class PaymentResource extends Response
 {
-    public function __construct(private Payment $payment) {}
+    public function __construct(private Payment $payment)
+    {
+    }
 
     public static function make(Payment $payment, HttpCode $httpCode = HttpCode::OK): string
     {

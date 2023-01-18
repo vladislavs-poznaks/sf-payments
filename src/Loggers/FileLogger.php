@@ -13,7 +13,7 @@ class FileLogger implements Logger
 
         $path = __DIR__ . '/../../logs/';
 
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             mkdir($path);
         }
 
@@ -21,7 +21,7 @@ class FileLogger implements Logger
 
         $log = json_encode([
             'message' => $exception->getMessage(),
-            'trace' => $exception->getTrace()
+            'trace' => $exception->getTrace(),
         ]) . PHP_EOL;
 
         file_put_contents($path . $filename, $log, FILE_APPEND);

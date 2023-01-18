@@ -15,7 +15,8 @@ use Tests\Traits\DummyPayments;
 
 class PaymentServiceTest extends TestCase
 {
-    use DummyLoans, DummyPayments;
+    use DummyLoans;
+    use DummyPayments;
 
     /**
      * @test
