@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Dtos\DTO;
 use App\Http\Exceptions\ValidationException;
 use Valitron\Validator;
 
@@ -32,6 +33,11 @@ class Request
     public function all(): array
     {
         return json_decode(file_get_contents('php://input'), true);
+    }
+
+    public function dto(): DTO
+    {
+        return new DTO();
     }
 
     public function rules(): array

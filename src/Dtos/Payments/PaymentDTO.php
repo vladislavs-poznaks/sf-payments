@@ -2,11 +2,12 @@
 
 namespace App\Dtos\Payments;
 
+use App\Dtos\DTO;
 use App\Models\ValueObjects\Amount;
 use Carbon\Carbon;
 use Ramsey\Uuid\UuidInterface;
 
-class PaymentDTO
+class PaymentDTO extends DTO
 {
     public function __construct(
         private readonly string $firstName,
