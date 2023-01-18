@@ -32,8 +32,9 @@ class PaymentsImportCommand extends Command
     {
         $path = __DIR__ . '/../../imports/' . $input->getOption('file');
 
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             $output->write('Invalid file path', true);
+
             return Command::FAILURE;
         }
 
@@ -57,7 +58,7 @@ class PaymentsImportCommand extends Command
                     'paymentDate' => $paymentDate,
                     'amount' => $amount,
                     'description' => $description,
-                    'refId' => $refId
+                    'refId' => $refId,
                 ]);
 
                 $repository->persist($payment);
@@ -76,7 +77,7 @@ class PaymentsImportCommand extends Command
         $file = fopen($path, 'r');
 
         $records = [];
-        while (($data = fgetcsv($file)) !== FALSE) {
+        while (($data = fgetcsv($file)) !== false) {
             $records[] = $data;
         }
 

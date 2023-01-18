@@ -17,6 +17,7 @@ class PaymentOrdersDatabaseRepository extends DatabaseRepository implements Paym
     {
         try {
             $this->entityManager->flush($order);
+
             return true;
         } catch (ORMException) {
             return false;

@@ -15,7 +15,8 @@ class PaymentsController
     public function __construct(
         private PaymentsRepository $repository,
         private PaymentService     $service
-    ) {}
+    ) {
+    }
 
     public function store()
     {
@@ -27,18 +28,18 @@ class PaymentsController
             'required' => ['firstname', 'lastname', 'paymentDate', 'amount', 'description', 'refId'],
             'numeric' => ['amount'],
             'min' => [
-                ['amount', 0.01]
+                ['amount', 0.01],
             ],
             'paymentDateFormat' => ['paymentDate'],
         ]);
 
-        if (!$validator->validate()) {
+        if (! $validator->validate()) {
             return Response::json($validator->errors(), Response::HTTP_BAD_REQUEST);
         }
 
-        if (!is_null($this->repository->getByRefId($attributes['refId']))) {
+        if (! is_null($this->repository->getByRefId($attributes['refId']))) {
             return Response::json([
-                'message' => "Payment with refId {$attributes['refId']} already exists"
+                'message' => "Payment with refId {$attributes['refId']} already exists",
             ], Response::HTTP_CONFLICT);
         }
 
@@ -47,7 +48,7 @@ class PaymentsController
         } catch (PaymentServiceException $e) {
             return Response::json([
                 'error' => $e->getMessage(),
-                'trace' => $e->getTrace()
+                'trace' => $e->getTrace(),
             ], Response::HTTP_INTERNAL_ERROR);
         }
 

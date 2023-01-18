@@ -8,7 +8,7 @@ use Doctrine\DBAL\Types\Type;
 
 class AmountType extends Type
 {
-    const NAME = 'amount';
+    public const NAME = 'amount';
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {

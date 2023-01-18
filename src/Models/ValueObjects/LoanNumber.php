@@ -13,7 +13,7 @@ class LoanNumber
 
     public function __construct(string $loanNumber)
     {
-        if (!static::isValid($loanNumber)) {
+        if (! static::isValid($loanNumber)) {
             $prefix = static::PREFIX;
             $count = static::NUMBER_COUNT;
 
