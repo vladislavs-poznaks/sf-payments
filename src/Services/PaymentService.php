@@ -50,6 +50,21 @@ class PaymentService
         return $this->payment;
     }
 
+    public function getLoansRepository(): LoansRepository
+    {
+        return $this->loansRepository;
+    }
+
+    public function getPaymentsRepository(): PaymentsRepository
+    {
+        return $this->paymentsRepository;
+    }
+
+    public function getPaymentOrdersRepository(): PaymentOrdersRepository
+    {
+        return $this->paymentOrdersRepository;
+    }
+
     private function getLoanNumber(): LoanNumber
     {
         try {

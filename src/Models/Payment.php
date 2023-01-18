@@ -48,6 +48,11 @@ class Payment
         private UuidInterface $refId
     ) {}
 
+    public function setId(UuidInterface $id)
+    {
+        $this->id = $id;
+    }
+
     public function getId(): UuidInterface
     {
         return $this->id;
