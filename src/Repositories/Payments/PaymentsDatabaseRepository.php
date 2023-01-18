@@ -45,6 +45,7 @@ class PaymentsDatabaseRepository extends DatabaseRepository implements PaymentsR
     {
         try {
             $this->entityManager->flush($payment);
+
             return true;
         } catch (ORMException) {
             return false;

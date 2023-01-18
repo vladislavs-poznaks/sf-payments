@@ -35,6 +35,7 @@ class PaymentsReportCommand extends Command
             $date = Carbon::createFromFormat('Y-m-d', $input->getOption('date'));
         } catch (InvalidFormatException) {
             $output->write('Invalid date format, must use YYYY-MM-DD', true);
+
             return PaymentsReportCommand::INVALID_DATE;
         }
 

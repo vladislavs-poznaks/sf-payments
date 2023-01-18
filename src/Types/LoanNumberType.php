@@ -8,7 +8,7 @@ use Doctrine\DBAL\Types\Type;
 
 class LoanNumberType extends Type
 {
-    const NAME = 'loan_number';
+    public const NAME = 'loan_number';
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {

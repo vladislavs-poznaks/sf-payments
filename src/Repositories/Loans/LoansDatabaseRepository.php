@@ -26,6 +26,7 @@ class LoansDatabaseRepository extends DatabaseRepository implements LoansReposit
     {
         try {
             $this->entityManager->flush($loan);
+
             return true;
         } catch (ORMException) {
             return false;
