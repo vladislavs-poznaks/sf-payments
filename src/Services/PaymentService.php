@@ -23,7 +23,8 @@ class PaymentService
         private LoansRepository $loansRepository,
         private PaymentsRepository $paymentsRepository,
         private PaymentOrdersRepository $paymentOrdersRepository
-    ) {}
+    ) {
+    }
 
     /**
      * @throws PaymentServiceException
@@ -84,6 +85,7 @@ class PaymentService
 
         if (is_null($loan)) {
             $this->changePaymentStatus(PaymentStatus::INCORRECT_LOAN_NUMBER_ERROR);
+
             throw new PaymentServiceException("Failed to find loan by parsed loan number");
         }
 

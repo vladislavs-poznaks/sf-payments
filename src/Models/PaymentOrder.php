@@ -46,7 +46,8 @@ class PaymentOrder implements Model
         private Amount $amount,
         #[Column]
         private string $description
-    ) {}
+    ) {
+    }
 
     public function getId(): UuidInterface
     {

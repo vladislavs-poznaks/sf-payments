@@ -2,14 +2,13 @@
 
 namespace App\Types;
 
-use App\Models\ValueObjects\Amount;
 use Carbon\Carbon;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
 class CarbonType extends Type
 {
-    const NAME = 'carbon';
+    public const NAME = 'carbon';
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {

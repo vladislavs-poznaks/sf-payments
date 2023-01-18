@@ -39,7 +39,8 @@ class Loan implements Model
         private Amount $amountIssued,
         #[Column(name: 'amount_owed', type: AmountType::NAME)]
         private Amount $amountOwed
-    ) {}
+    ) {
+    }
 
     public function isOverpaid(Amount $amount): bool
     {

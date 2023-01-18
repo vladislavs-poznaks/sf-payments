@@ -46,7 +46,8 @@ class Payment implements Model
         private string $description,
         #[Column(name: 'ref_id', type: UuidType::NAME, unique: true)]
         private UuidInterface $refId
-    ) {}
+    ) {
+    }
 
     public function setId(UuidInterface $id)
     {

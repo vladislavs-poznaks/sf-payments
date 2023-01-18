@@ -44,8 +44,9 @@ class PaymentsImportCommand extends Command implements NegativeAmountInterface, 
     {
         $path = __DIR__ . '/../../imports/' . $input->getOption('file');
 
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             $output->write('Invalid file path', true);
+
             return Command::FAILURE;
         }
 
