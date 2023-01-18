@@ -20,7 +20,7 @@ use Ramsey\Uuid\UuidInterface;
 
 #[Entity]
 #[Table('loans')]
-class Loan
+class Loan implements Model
 {
     #[Id]
     #[Column(type: UuidType::NAME, unique: true)]

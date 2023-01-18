@@ -10,9 +10,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PaymentsReportCommand extends Command
+class PaymentsReportCommand extends Command implements InvalidDateInterface
 {
-    public const INVALID_DATE = 3;
+    public const INPUT_DATE_FORMAT = 'Y-m-d';
 
     protected static $defaultName = "sf-payments:payments-report";
 
@@ -32,18 +32,22 @@ class PaymentsReportCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            $date = Carbon::createFromFormat('Y-m-d', $input->getOption('date'));
+            $date = Carbon::createFromFormat(static::INPUT_DATE_FORMAT, $input->getOption('date'));
         } catch (InvalidFormatException) {
             $output->write('Invalid date format, must use YYYY-MM-DD', true);
-            return PaymentsReportCommand::INVALID_DATE;
+            return self::INVALID_DATE;
         }
 
         $repository = new PaymentsDatabaseRepository();
 
         $payments = $repository->getByDate($date);
 
-        foreach ($payments as $payment) {
-            $output->write(implode(' | ', $payment->toArray()), true);
+        foreach ($payments->all() as $payment) {
+            $output->write(implode(' | ', [
+                "RefId: {$payment->getRefId()}",
+                "Amount: {$payment->getAmount()}",
+                "Status: {$payment->getStatus()->toString()}",
+            ]), true);
         }
 
         return Command::SUCCESS;
