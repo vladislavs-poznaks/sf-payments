@@ -2,56 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Request;
-use App\Http\Response;
+use App\Http\HttpCode;
+use App\Http\Requests\PaymentStoreRequest;
+use App\Http\Resources\PaymentResource;
+use App\Loggers\Logger;
 use App\Models\Payment;
-use App\Repositories\Payments\PaymentsRepository;
 use App\Services\Exceptions\PaymentServiceException;
 use App\Services\PaymentService;
-use Valitron\Validator;
 
 class PaymentsController
 {
     public function __construct(
-        private PaymentsRepository $repository,
-        private PaymentService     $service
+        private PaymentService $service,
+        private Logger $logger
     ) {
     }
 
-    public function store()
+    public function store(PaymentStoreRequest $request)
     {
-        $attributes = Request::getInstance()->all();
-
-        $validator = new Validator($attributes);
-
-        $validator->rules([
-            'required' => ['firstname', 'lastname', 'paymentDate', 'amount', 'description', 'refId'],
-            'numeric' => ['amount'],
-            'min' => [
-                ['amount', 0.01],
-            ],
-            'paymentDateFormat' => ['paymentDate'],
-        ]);
-
-        if (! $validator->validate()) {
-            return Response::json($validator->errors(), Response::HTTP_BAD_REQUEST);
-        }
-
-        if (! is_null($this->repository->getByRefId($attributes['refId']))) {
-            return Response::json([
-                'message' => "Payment with refId {$attributes['refId']} already exists",
-            ], Response::HTTP_CONFLICT);
-        }
-
         try {
-            $this->service->handle(Payment::make($attributes));
+            $this->service->handle(Payment::make($request->dto()));
         } catch (PaymentServiceException $e) {
-            return Response::json([
-                'error' => $e->getMessage(),
-                'trace' => $e->getTrace(),
-            ], Response::HTTP_INTERNAL_ERROR);
+            $this->logger::error($e, 'payments');
         }
 
-        return Response::json($this->service->getPayment()->toArray(), Response::HTTP_CREATED);
+        return PaymentResource::make($this->service->getPayment(), HttpCode::CREATED);
     }
 }

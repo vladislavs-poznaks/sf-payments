@@ -2,20 +2,32 @@
 
 namespace App\Commands;
 
+use App\Dtos\Payments\PaymentDTO;
 use App\Models\Payment;
-use App\Repositories\Payments\PaymentsDatabaseRepository;
+use App\Models\ValueObjects\Amount;
+use App\Models\ValueObjects\Exceptions\NegativeAmountException;
+use App\Repositories\Payments\PaymentsRepository;
+use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
-use Psr\Log\InvalidArgumentException;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PaymentsImportCommand extends Command
+class PaymentsImportCommand extends Command implements NegativeAmountInterface, InvalidDateInterface
 {
+    public const INPUT_DATE_FORMAT = 'YmdHms';
+
     protected static $defaultName = "sf-payments:payments-import";
 
     protected static $defaultDescription = "Import payments from CSV";
+
+    public function __construct(
+        private PaymentsRepository $repository
+    ) {
+        parent::__construct();
+    }
 
     protected function configure()
     {
@@ -38,51 +50,51 @@ class PaymentsImportCommand extends Command
             return Command::FAILURE;
         }
 
-        $records = $this->getParsedRecords($path);
-
-        $repository = new PaymentsDatabaseRepository();
-
-        foreach ($records as $key => $attributes) {
-            if ($key === 0) {
-                continue;
-            }
-
-            [
-                $paymentDate, $firstname, $lastname, $amount, $nationalSecurityNumber, $description, $refId
-            ] = $attributes;
-
-            try {
-                $payment = Payment::make([
-                    'firstname' => $firstname,
-                    'lastname' => $lastname,
-                    'paymentDate' => $paymentDate,
-                    'amount' => $amount,
-                    'description' => $description,
-                    'refId' => $refId,
-                ]);
-
-                $repository->persist($payment);
-            } catch (InvalidFormatException|InvalidArgumentException $e) {
-                $output->writeln($e->getMessage());
-            }
-        }
-
-        $repository->getEntityManager()->flush();
-
-        return Command::SUCCESS;
-    }
-
-    private function getParsedRecords(string $path): array
-    {
         $file = fopen($path, 'r');
 
-        $records = [];
         while (($data = fgetcsv($file)) !== false) {
-            $records[] = $data;
+            try {
+                $dto = $this->createPaymentDto($data);
+            } catch (InvalidFormatException) {
+                return self::INVALID_DATE;
+            } catch (NegativeAmountException) {
+                return self::NEGATIVE_AMOUNT;
+            }
+
+            if (! is_null($this->repository->getByRefId($dto->getRefId()))) {
+                return Command::FAILURE;
+            }
+
+            $payment = Payment::make($dto);
+
+            $this->repository->persistAndSync($payment);
         }
 
         fclose($file);
 
-        return $records;
+        return Command::SUCCESS;
+    }
+
+    private function createPaymentDto(array $data): PaymentDTO
+    {
+        $paymentDate = Carbon::createFromFormat(static::INPUT_DATE_FORMAT, $data[0]);
+
+        $amount = Amount::make(ceil($data[3] * 100));
+
+        $refId = Uuid::fromString($data[6]);
+
+        $firstName = $data[1];
+        $lastName = $data[2];
+
+        $description = $data[5];
+
+        return new PaymentDTO(
+            firstName: $firstName,
+            lastName: $lastName,
+            description: $description,
+            amount: $amount,
+            paymentDate: $paymentDate,
+            refId: $refId
+        );
     }
 }

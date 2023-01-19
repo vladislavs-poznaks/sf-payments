@@ -19,7 +19,7 @@ use Ramsey\Uuid\UuidInterface;
 
 #[Entity]
 #[Table('payment_orders')]
-class PaymentOrder
+class PaymentOrder implements Model
 {
     #[Id]
     #[Column(type: UuidType::NAME, unique: true)]

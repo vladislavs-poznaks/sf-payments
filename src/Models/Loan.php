@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Table;
-use http\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\Uuid;
@@ -20,7 +20,7 @@ use Ramsey\Uuid\UuidInterface;
 
 #[Entity]
 #[Table('loans')]
-class Loan
+class Loan implements Model
 {
     #[Id]
     #[Column(type: UuidType::NAME, unique: true)]

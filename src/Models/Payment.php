@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Dtos\Payments\PaymentDTO;
 use App\Models\ValueObjects\Amount;
 use App\Types\AmountType;
 use App\Types\CarbonType;
@@ -14,12 +15,11 @@ use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Table;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
-use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
 #[Entity]
 #[Table('payments')]
-class Payment
+class Payment implements Model
 {
     #[Id]
     #[Column(type: UuidType::NAME, unique: true)]
@@ -47,6 +47,11 @@ class Payment
         #[Column(name: 'ref_id', type: UuidType::NAME, unique: true)]
         private UuidInterface $refId
     ) {
+    }
+
+    public function setId(UuidInterface $id)
+    {
+        $this->id = $id;
     }
 
     public function getId(): UuidInterface
@@ -110,37 +115,15 @@ class Payment
         return $this;
     }
 
-    public function toArray(): array
+    public static function make(PaymentDTO $dto): self
     {
-        return [
-            'id' => $this->getId()->toString(),
-            'loanId' => $this->getLoanId()?->toString(),
-            'firstname' => $this->getFirstname(),
-            'lastname' => $this->getLastname(),
-            'paymentDate' => $this->getPaymentDate()->toDateTimeString(),
-            'amount' => $this->getAmount()->getAmount(),
-            'description' => $this->getDescription(),
-            'refId' => $this->getRefId()->toString(),
-            'status' => $this->getStatus()->toString(),
-        ];
-    }
-
-    public static function make(array $attributes): self
-    {
-        $firstname = $attributes['firstname'];
-        $lastname = $attributes['lastname'];
-        $paymentDate = Carbon::parse($attributes['paymentDate']);
-        $amount = Amount::make(ceil($attributes['amount'] * 100));
-        $description = $attributes['description'];
-        $refId = Uuid::fromString($attributes['refId']);
-
         return new self(
-            firstname: $firstname,
-            lastname: $lastname,
-            paymentDate: $paymentDate,
-            amount: $amount,
-            description: $description,
-            refId: $refId
+            firstname: $dto->getFirstName(),
+            lastname: $dto->getLastName(),
+            paymentDate: $dto->getPaymentDate(),
+            amount: $dto->getAmount(),
+            description: $dto->getDescription(),
+            refId: $dto->getRefId()
         );
     }
 }

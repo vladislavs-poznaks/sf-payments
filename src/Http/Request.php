@@ -2,6 +2,10 @@
 
 namespace App\Http;
 
+use App\Dtos\DTO;
+use App\Http\Exceptions\ValidationException;
+use Valitron\Validator;
+
 class Request
 {
     public const METHOD_GET = 'GET';
@@ -14,26 +18,47 @@ class Request
         'GET', 'POST', 'PUT', 'PATCH', 'DELETE',
     ];
 
-    protected static $instance = null;
+    protected Validator $validator;
 
-    public static function getInstance(): self
+    public function __construct()
     {
-        if (is_null(static::$instance)) {
-            static::$instance = new self();
+        $this->validator = new Validator($this->all());
+
+        $this->validator->rules($this->rules());
+
+        if (! $this->validator->validate()) {
+            throw new ValidationException($this);
         }
-
-        return static::$instance;
     }
 
-    protected function __construct()
+    public function all(): array
     {
+        return json_decode(file_get_contents('php://input'), true);
     }
 
-    protected function __clone()
+    public function dto(): DTO
     {
+        return new DTO();
     }
 
-    public function method(): string
+    public function rules(): array
+    {
+        return [
+            // Validation rules
+        ];
+    }
+
+    public function getHttpErrorCode(): HttpCode
+    {
+        return HttpCode::UNPROCESSABLE_ENTITY;
+    }
+
+    public function errors(?string $field = null): array|bool
+    {
+        return $this->validator->errors($field);
+    }
+
+    public static function method(): string
     {
         //Method spoofing
         if (isset($_POST['_method'])) {
@@ -45,7 +70,7 @@ class Request
         return $_SERVER['REQUEST_METHOD'];
     }
 
-    public function uri(): string
+    public static function uri(): string
     {
         $uri = $_SERVER['REQUEST_URI'];
 
@@ -55,10 +80,5 @@ class Request
         }
 
         return rawurldecode($uri);
-    }
-
-    public function all(): array
-    {
-        return json_decode(file_get_contents('php://input'), true);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Models\ValueObjects;
 
-use InvalidArgumentException;
+use App\Models\ValueObjects\Exceptions\NegativeAmountException;
 
 class Amount
 {
@@ -11,7 +11,7 @@ class Amount
     public function __construct(int $amount)
     {
         if ($amount < 0) {
-            throw new InvalidArgumentException('Amount must be positive');
+            throw new NegativeAmountException('Amount cannot be negative');
         }
 
         $this->amount = $amount;
@@ -35,5 +35,10 @@ class Amount
     public function getAmount(): int
     {
         return $this->amount;
+    }
+
+    public function __toString(): string
+    {
+        return (string) round($this->amount / 100, 2);
     }
 }
